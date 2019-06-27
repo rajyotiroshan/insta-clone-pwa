@@ -1,5 +1,5 @@
 {
-  "name": "Instagramas PWA",
+  "name": "Instagramas as PWA",
   "short_name":"PWAGram",
   "icons": [
     {
@@ -44,7 +44,7 @@
   "display":"standalone",
   "orientation":"portrait-primary",
   "background_color":"#fff",
-  "theme_color":"#3f51b5", 
+  "theme_color":"pink", 
   "description":"A Simple Instagram clone ,imeplementing a lot of pwa features",
   "dir":"ltr",
   "lang":"en-US"
