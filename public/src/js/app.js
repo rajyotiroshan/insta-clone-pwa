@@ -11,5 +11,12 @@ if("serviceWorker" in navigator) {
     .then(function(){
       console.log("Service worker is registered");
     });
-
 }
+
+//prompt homescreen banner install 
+window.addEventListener("beforeinstallprompt", (event)=>{
+  event.preventDefault();//donot let chrome promt the banner by default.
+  console.log("beforeinstallprompt event is fired");
+  deferredPrompt = event;
+  return false;//not to anything on this event.
+});
