@@ -20,3 +20,4 @@ window.addEventListener("beforeinstallprompt", (event)=>{
   deferredPrompt = event;
   return false;//not to anything on this event.
 });
+
