@@ -1,15 +1,15 @@
 var shareImageButton = document.querySelector('#share-image-button');
 var createPostArea = document.querySelector('#create-post');
 var closeCreatePostModalButton = document.querySelector('#close-create-post-modal-btn');
-
+var sharedMomentsArea = document.querySelector("#shared-moments");
 function openCreatePostModal() {
   createPostArea.style.display = 'block';
-  if(deferedPrompt) {//deferredPrompt is set.
+  if(deferredPrompt) {//deferredPrompt is set.
     //show the banner.
-    deferedPrompt.prompt();
+    deferredPrompt.prompt();
     //listen for user choice
     //whether the user install it to the homescreen or not.
-    deferedPrompt.userChoice.then((choiceResult)=>{
+    deferredPrompt.userChoice.then((choiceResult)=>{
       console.log(choiceResult.outcome);
 
       if(choiceResult.outcome === "dismissed") {
@@ -18,7 +18,7 @@ function openCreatePostModal() {
         console.log("User installed to the home screen ");
       }
     });
-    deferedPrompt = nul;
+    deferredPrompt = nul;
 
   }
 }
@@ -41,6 +41,7 @@ function createCard() {
   cardTitle.style.height = '180px';
   cardWrapper.appendChild(cardTitle);
   var cardTitleTextElement = document.createElement('h2');
+  cardTitleTextElement.style.color = "black";
   cardTitleTextElement.className = 'mdl-card__title-text';
   cardTitleTextElement.textContent = 'San Francisco Trip';
   cardTitle.appendChild(cardTitleTextElement);
