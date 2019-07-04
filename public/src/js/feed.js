@@ -43,6 +43,12 @@ closeCreatePostModalButton.addEventListener('click', closeCreatePostModal);
   }
 } */
 
+function clearCards(){
+  while(sharedMomentsArea.hasChildNodes()){
+    sharedMomentsArea.removeChild(sharedMomentsArea.lastChild);
+  }
+}
+
 function createCard() {
   var cardWrapper = document.createElement('div');
   cardWrapper.className = 'shared-moment-card mdl-card mdl-shadow--2dp';
@@ -72,10 +78,38 @@ function createCard() {
   sharedMomentsArea.appendChild(cardWrapper);
 }
 
-fetch('https://httpbin.org/get')
+/**
+ * Cache then network Strategy.
+ */
+let url = "https://httpbin.org/get";
+let networkDataReceived = false;
+
+//fetch directly from network
+//but won'e finish.
+fetch(url)
   .then(function(res) {
     return res.json();
   })
   .then(function(data) {
+    networkDataReceived = true;
+    console.log("From web data", data);
+    clearCards();
     createCard();
   });
+//Check if the url is cached.
+if('caches' in window) {
+  caches.match(url)
+  .then((res)=>{
+    if(res) {
+      return res.json();
+    }
+  })
+  .then((data)=>{
+    console.log("From Cache", data);
+    if(!networkDataReceived){//web data is not fetched yet.
+      clearCards();
+      createCard();
+    }
+    
+  });
+}
