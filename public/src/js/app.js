@@ -7,7 +7,7 @@ if("serviceWorker" in navigator) {
   //returns a promise.
   //register takes two args.
   navigator.serviceWorker
-    .register('/sw.js', {scope: '/help/'})
+    .register('/sw.js')
     .then(function(){
       console.log("Service worker is registered");
     });
