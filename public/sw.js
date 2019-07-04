@@ -1,5 +1,5 @@
-var CACHE_STATIC_NAME = "static-v4";
-var CACHE_DYNAMIC_NAME = "dynamic-v2";
+var CACHE_STATIC_NAME = "static-v5";
+var CACHE_DYNAMIC_NAME = "dynamic-v3";
 //listen for events and react.
 //self refer to the service worker
 //install event is fired when browser install the new sw.

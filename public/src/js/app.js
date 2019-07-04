@@ -17,7 +17,7 @@ if("serviceWorker" in navigator) {
 window.addEventListener("beforeinstallprompt", (event)=>{
   event.preventDefault();//donot let chrome promt the banner by default.
   console.log("beforeinstallprompt event is fired");
-  deferredPrompt = event;
+  window.deferredPrompt = event;
   return false;//not to anything on this event.
 });
 

@@ -4,12 +4,12 @@ var closeCreatePostModalButton = document.querySelector('#close-create-post-moda
 var sharedMomentsArea = document.querySelector("#shared-moments");
 function openCreatePostModal() {
   createPostArea.style.display = 'block';
-  if(deferredPrompt) {//deferredPrompt is set.
+  if(window.deferredPrompt) {//deferredPrompt is set.
     //show the banner.
-    deferredPrompt.prompt();
+    window.deferredPrompt.prompt();
     //listen for user choice
     //whether the user install it to the homescreen or not.
-    deferredPrompt.userChoice.then((choiceResult)=>{
+    window.deferredPrompt.userChoice.then((choiceResult)=>{
       console.log(choiceResult.outcome);
 
       if(choiceResult.outcome === "dismissed") {
@@ -18,7 +18,7 @@ function openCreatePostModal() {
         console.log("User installed to the home screen ");
       }
     });
-    deferredPrompt = nul;
+    window.deferredPrompt = nul;
 
   }
 }
@@ -30,6 +30,18 @@ function closeCreatePostModal() {
 shareImageButton.addEventListener('click', openCreatePostModal);
 
 closeCreatePostModalButton.addEventListener('click', closeCreatePostModal);
+
+//
+/* onSaveButtonClick = (event)=>{
+  console.log("click");
+  if('caches' in window){
+    caches.open("user-requested")
+    .then((cache)=>{
+      cache.add('https://httpbin.org/get');
+      cache.add('/src/images/sf-boat.jpg');
+    });
+  }
+} */
 
 function createCard() {
   var cardWrapper = document.createElement('div');
@@ -49,6 +61,12 @@ function createCard() {
   cardSupportingText.className = 'mdl-card__supporting-text';
   cardSupportingText.textContent = 'In San Francisco';
   cardSupportingText.style.textAlign = 'center';
+/*   var cardSaveButton = document.createElement("button");
+  cardSaveButton.textContent = "Save";
+  cardSaveButton.style.padding = "5px 10px";
+  cardSaveButton.style.fontSize  = "1.2rem";
+  cardSaveButton.addEventListener("click", onSaveButtonClick);
+  cardSupportingText.appendChild(cardSaveButton); */
   cardWrapper.appendChild(cardSupportingText);
   componentHandler.upgradeElement(cardWrapper);
   sharedMomentsArea.appendChild(cardWrapper);
