@@ -1,4 +1,4 @@
-var CACHE_STATIC_NAME = "static-v9";
+var CACHE_STATIC_NAME = "static-v11";
 var CACHE_DYNAMIC_NAME = "dynamic-v5  ";
 //listen for events and react.
 //self refer to the service worker
@@ -39,7 +39,19 @@ self.addEventListener("install", event => {
     })
   );
 });
-/** */
+/**
+ * clear or delete access cache
+ */
+
+function trimCache(cacheName, maxItem) {
+  caches.open(cacheName).then(cache => {
+    return cache.keys().then(keys => {
+      if (keys.length > maxItem) {
+        cache.delete(keys[0]).then(trimCache(cacheName, maxItem));
+      }
+    });
+  });
+}
 
 self.addEventListener("activate", event => {
   console.log("Service worker Activating the sw...", event);
@@ -88,50 +100,46 @@ self.addEventListener("activate", event => {
   );
 });  */
 
-/** 
+/**
  * cache then networking, and dynamic caching.
  */
-self.addEventListener("fetch",(event)=>{
-  let url  = "https://httpbin.org/get";
-  if(event.request.url.indexOf(url) > -1) {
+self.addEventListener("fetch", event => {
+  let url = "https://httpbin.org/get";
+  if (event.request.url.indexOf(url) > -1) {
     //found something.
     event.respondWith(
-      caches.open(CACHE_DYNAMIC_NAME)
-      .then((cache)=>{
-        return fetch(event.request)
-        .then((res)=>{
+      caches.open(CACHE_DYNAMIC_NAME).then(cache => {
+        return fetch(event.request).then(res => {
+          trimCache(CACHE_DYNAMIC_NAME, 3);
           cache.put(event.request, res.clone());
           return res;
-        })
+        });
       })
     );
-}else {
-  caches.match(event.request)
-  .then((response)=>{
-    if(response) return response; 
-    else {
-      return fetch(event.request)
-            .then(function(res){
-              return caches.open(CACHE_DYNAMIC_NAME)
-              .then(function(cache){
-                cache.put(event.request.url, res.clone());
-                return res;
-              });
-              //return res;
-            })
-            .catch((err)=>{
-               return caches.open(CACHE_STATIC_NAME)
-              .then((cache)=>{
-                if(request.url.indexOf('\help')) {
-                    return cache.match('/offline.html'); 
-                }
-               
-              });
-            }); 
-    }
-  })
-}
-}); 
+  } else {
+    caches.match(event.request).then(response => {
+      if (response) return response;
+      else {
+        return fetch(event.request)
+          .then(function(res) {
+            return caches.open(CACHE_DYNAMIC_NAME).then(function(cache) {
+              trimCache(CACHE_DYNAMIC_NAME, 3);
+              cache.put(event.request.url, res.clone());
+              return res;
+            });
+            //return res;
+          })
+          .catch(err => {
+            return caches.open(CACHE_STATIC_NAME).then(cache => {
+              if (event.request.url.indexOf("help")) {
+                return cache.match("/offline.html");
+              }
+            });
+          });
+      }
+    });
+  }
+});
 
 /**
  * cache only strategy.
@@ -178,4 +186,3 @@ self.addEventListener("fetch",(event)=>{
 /**
  * Cache then Network
  */
-
